@@ -1,0 +1,97 @@
+.calculator-grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    min-height: 100vh;
+    background-color: black;
+}
+
+.operand {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: end;
+    grid-column: 1/-1;
+    width: 320px;
+    height: 90px;
+    background-color: rgb(28, 28, 28);
+}
+
+.previous-operand {
+    color: rgba(226, 82, 82, 0.692);
+    top: 9%;
+    right: 3%;
+    font-size: smaller;
+    word-break: break-all;
+}
+
+.current-operand {
+
+    color: rgb(226, 82, 82);
+    word-break: break-all;
+    font-size: x-large;
+    right: 0%;
+    position: relative;
+}
+
+.calculator-grid>button {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border: 1px solid #144168;
+    background: #144168;
+    color: white;
+    font-size: larger;
+}
+
+
+
+.calculator-grid #span-two {
+    position: relative;
+    width: 10px;
+    color: rgb(226, 82, 82);
+    font-size: 22px;
+}
+
+#Evaluate {
+    position: relative;
+    color: rgb(226, 82, 82);
+    width: 160px;
+    font-size: 30px;
+    grid-column: span 2;
+}
+
+.deletelogo {
+    position: relative;
+    top: 4%;
+    right: 4%;
+    width: 32px;
+    height: 23px;
+    background-color: #264e6d;
+}
+
+@media only screen and (max-width: 600px) {
+    .operand {
+        width: 427px;
+        height: 176px;
+    }
+
+    .calculator-grid>button {
+        width: 107px;
+        height: 135px;
+    }
+
+    #Evaluate {
+        width: 214px;
+    }
+
+    .previous-operand {
+        font-size: 25px;
+    }
+
+    .current-operand {
+        font-size: 35px;
+    }
+}
