@@ -18,15 +18,34 @@ function App() {
   function reducer(state, { type, payload }) {
     switch (type) {
       case ACTIONS.ADD_DIGIT:
+
+        if (payload.digit == '.' && payload.operation !== '' && state.currentoperand == '') {
+          return {
+            ...state,
+            overwrite: false,
+            currentoperand: `0${payload.digit}`
+          }
+        }
         if (payload.digit == '0' && state.currentoperand == '0') {
           return {
             ...state
           }
         }
-        if (payload.digit == '.' && state.currentoperand.includes('.')) {
+        if (state.overwrite && payload.digit == '.') {
           return {
             ...state,
+            overwrite: false,
+            currentoperand: `0${payload.digit}`
           }
+        }
+        if (payload.digit == '.' && state.currentoperand == null) {
+          return {
+            ...state,
+            currentoperand: `0${payload.digit}`
+          }
+        }
+        if (payload.digit == "." && state.currentoperand.includes(".")) {
+          return state
         }
 
         if (state.overwrite == true) {
@@ -34,6 +53,20 @@ function App() {
             ...state,
             overwrite: false,
             currentoperand: '' + payload.digit
+          }
+        }
+        if (state.currentoperand == 'Result is undefined' && payload.digit !== '.') {
+          return {
+            ...state,
+            overwrite: false,
+            currentoperand: payload.digit
+          }
+        }
+        if (state.currentoperand == 'Result is undefined' && payload.digit == '.') {
+          return {
+            ...state,
+            overwrite: false,
+            currentoperand: `0${payload.digit}`
           }
         }
         return {
@@ -53,7 +86,6 @@ function App() {
             ...state,
           }
         }
-
         if (state.previousoperand == null) {
           return {
             ...state,
@@ -62,7 +94,14 @@ function App() {
             operation: payload.operation
           }
         }
-
+        if (state.operation.includes('÷') && state.currentoperand == 0 && state.previousoperand == 0) {
+          return {
+            ...state,
+            previousoperand: '',
+            operation: '',
+            currentoperand: 'Result is undefined'
+          }
+        }
         if (state.currentoperand == '') {
           return {
             ...state,
@@ -75,7 +114,11 @@ function App() {
             previousoperand: evaluate(state),
             currentoperand: '',
             operation: payload.operation
-
+          }
+        }
+        if (state.currentoperand == 'Result is undefined') {
+          return {
+            ...state
           }
         }
         return {
@@ -85,6 +128,11 @@ function App() {
           operation: payload.operation
         }
       case ACTIONS.EVALUATE:
+        if (state.previousoperand !== '' && state.currentoperand == '') {
+          return {
+            ...state
+          }
+        }
         if (state.previousoperand == '') {
           return {
             ...state,
@@ -94,7 +142,21 @@ function App() {
         if (state.currentoperand == '') {
           return {
             ...state,
+            currentoperand: evaluate(state)
+          }
+        }
 
+        if (state.currentoperand !== null && state.previousoperand == null) {
+          return {
+            ...state,
+          }
+        }
+        if (state.previousoperand == 0 && state.currentoperand == 0 && state.operation == '÷') {
+          return {
+            ...state,
+            previousoperand: '',
+            currentoperand: 'Result is undefined',
+            operation: ''
           }
         }
         return {
@@ -117,18 +179,20 @@ function App() {
             previousoperand: ''
           }
         }
+        if (state.currentoperand == 'Result is undefined') {
+          return {
+            ...state,
+          }
+        }
         return {
           ...state,
           currentoperand: `${state.currentoperand}`.slice(0, -1)
         }
     }
   }
-
   function Delete() {
-
     dispatch({ type: ACTIONS.DELETE })
   }
-
   function evaluate({ currentoperand, previousoperand, operation }) {
     const current = parseFloat(currentoperand)
     const prev = parseFloat(previousoperand)
