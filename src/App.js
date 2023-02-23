@@ -102,6 +102,14 @@ function App() {
             currentoperand: 'Result is undefined'
           }
         }
+        if (state.operation.includes('%') && state.currentoperand == 0 && state.previousoperand == 0) {
+          return {
+            ...state,
+            previousoperand: '',
+            operation: '',
+            currentoperand: 'Result is undefined'
+          }
+        }
         if (state.currentoperand == '') {
           return {
             ...state,
